@@ -1,0 +1,30 @@
+{
+  "name": "mini_project",
+  "version": "1.0.0",
+  "description": "Mini Project use postgresql",
+  "main": "index.js",
+  "scripts": {
+    "test": "trst"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DhikDhik15/miniProject.git"
+  },
+  "keywords": [
+    "postgresql"
+  ],
+  "author": "DhikDhik15",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DhikDhik15/miniProject/issues"
+  },
+  "homepage": "https://github.com/DhikDhik15/miniProject#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.2"
+  }
+}
