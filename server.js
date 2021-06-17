@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const dotenv = require('dotenv');
 const cors = require ("cors");
 const Sequelize = require("sequelize");
 const db = require("./models");
@@ -19,6 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
+
+
 
 /*Example simple route*/
 app.get("/", (req, res) => {
