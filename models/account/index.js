@@ -1,4 +1,5 @@
-const dbConfig = require("../config/db.config.account.js");
+'use strict';
+const dbConfig = require("../../config/database/account");
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD,{
@@ -19,6 +20,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tutorials = require("./province.model.js")(sequelize, Sequelize);
+db.miniproject = require("./province.model.js")(sequelize, Sequelize);
+db.miniproject = require("./district.model.js")(sequelize, Sequelize);
+db.miniproject = require("./account.model.js")(sequelize, Sequelize);
 
 module.exports = db;
