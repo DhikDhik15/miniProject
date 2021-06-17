@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const cors = require ("cors");
 const Sequelize = require("sequelize");
 dbAccount = require('./models/account/index');
+dbProduct = require('./models/product/index');
+dbTransaction = require('./models/transaction/index');
 
 const app = express();
 var corsOption = {
@@ -21,6 +23,8 @@ app.use(express.urlencoded({
 }));
 
 dbAccount.sequelize.sync();
+dbProduct.sequelize.sync();
+dbTransaction.sequelize.sync();
 
 /*Example simple route*/
 app.get("/", (req, res) => {
