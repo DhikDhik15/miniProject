@@ -3,9 +3,11 @@ const bodyParser = require("body-parser");
 const dotenv = require('dotenv');
 const cors = require ("cors");
 const Sequelize = require("sequelize");
+//connect to models
 dbAccount = require('./models/account/index');
 dbProduct = require('./models/product/index');
 dbTransaction = require('./models/transaction/index');
+dbPayment = require('./models/payment/index');
 
 const app = express();
 var corsOption = {
@@ -22,9 +24,11 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+//sync to sequilize
 dbAccount.sequelize.sync();
 dbProduct.sequelize.sync();
 dbTransaction.sequelize.sync();
+dbPayment.sequelize.sync();
 
 /*Example simple route*/
 app.get("/", (req, res) => {
