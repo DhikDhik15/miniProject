@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     phone: {
       type: Sequelize.INTEGER(12)
-    },
+     },
     id_province: {
       type: Sequelize.INTEGER(3)
     },
@@ -16,9 +16,6 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER(2)
     },
     email: {
-      type: Sequelize.STRING
-    },
-    password: {
       type: Sequelize.STRING
     }
 
