@@ -2,8 +2,7 @@ var dbAccount = require('../../../models/account/index');
 var tableProvince = dbAccount.province;
 const sequelize = require('sequelize');
 
-// post
-
+// POST
 exports.addProvince = (req, res) => {
   const post = {
     name: req.body.name
@@ -47,4 +46,16 @@ exports.addProvince = (req, res) => {
       });
     })
   }
+},
+
+// GET
+exports.getProvince = (req, res) => {
+  tableProvince.findAll({
+    attributes: ['id', 'name'],
+  }).then ((data) => {
+    res.status(200).send({
+      data:data,
+      message: "Data province"
+    });
+  });
 }
