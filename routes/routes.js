@@ -3,4 +3,6 @@ module.exports = function (app) {
 
   app.route('/province').post(province.addProvince);
   app.route('/province').get(province.getProvince);
+  app.route('/province').put(province.putProvince);
+  app.route('/province/:id').delete(province.deleteProvince);
 }
