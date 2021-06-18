@@ -59,3 +59,51 @@ exports.getProvince = (req, res) => {
     });
   });
 }
+
+//PUT
+exports.putProvince = (req, res) => {
+  const data = {
+    id: req.body.id,
+    name: req.body.name
+  }
+  tableProvince.update(req.body, {
+    where: { id: data.id }
+  }).then(num => {
+    if (num == 1){
+      res.send({
+        message: "Update berhasil"
+      });
+    } else {
+      res.send({
+        message: `Gagal update id=${id}`
+      });
+    }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Error update"
+    });
+  });
+},
+
+//DELETE
+exports.deleteProvince = (req, res) => {
+  const id= req.params.id;
+
+  tableProvince.destroy({
+    where: {id: id}
+  }).then (num => {
+    if (num == 1){
+      res.send({
+        message: "Province was deleted"
+      });
+    } else {
+      res.send({
+        message: `Error delete id=${id}`
+      });
+    }
+  }).catch(err => {
+    res.status(500).send({
+      message: "Tidak dapat menghapus"
+    });
+  });
+}
