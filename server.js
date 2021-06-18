@@ -24,18 +24,15 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+const routes = require('./routes/routes');
+routes(app);
+
 //sync to sequilize
 dbAccount.sequelize.sync();
 dbProduct.sequelize.sync();
 dbTransaction.sequelize.sync();
 dbPayment.sequelize.sync();
 
-/*Example simple route*/
-app.get("/", (req, res) => {
-  res.json({
-    message: "welcome to project NodeJS and Postgresql"
-  });
-});
 
 /*config PORT*/
 const PORT = process.env.PORT || 8001;
