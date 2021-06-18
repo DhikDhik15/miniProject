@@ -20,8 +20,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.miniproject = require("./province.model.js")(sequelize, Sequelize);
-db.miniproject = require("./district.model.js")(sequelize, Sequelize);
-db.miniproject = require("./account.model.js")(sequelize, Sequelize);
+db.province = require("./province.model.js")(sequelize, Sequelize);
+db.district = require("./district.model.js")(sequelize, Sequelize);
+db.account = require("./account.model.js")(sequelize, Sequelize);
 
 module.exports = db;
