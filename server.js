@@ -3,6 +3,10 @@ const bodyParser = require("body-parser");
 const dotenv = require('dotenv');
 const cors = require ("cors");
 const Sequelize = require("sequelize");
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+const apiDocumentation = require('./miniProject.json');
+
 //connect to models
 dbAccount = require('./models/account/index');
 dbProduct = require('./models/product/index');
@@ -14,6 +18,20 @@ var corsOption = {
   origin: "http://localhost:8001"
 };
 
+/* Swagger */
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'Library Mini-Project',
+      version: '1.0.0'
+    }
+  },
+  apis: ['server.js']
+}; 
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/miniProject', swaggerUi.serve, swaggerUi.setup(apiDocumentation));
+
+// CORS
 app.use(cors(corsOption));
 
 /*parse requests of content-type - application/json*/
