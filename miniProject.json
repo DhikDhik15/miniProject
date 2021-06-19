@@ -1,0 +1,120 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Dokumentasi Mini-Project",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "ACCOUNT"
+        },
+        {
+            "name": "PRODUCT"
+        },
+        {
+            "name": "TRANSACTION"
+        },
+        {
+            "name": "PAYMENT"
+        }
+    ],
+    "paths": {
+        "/province":{
+            "post": {
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "consumes": "application/json",
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SUKSES"
+                    }
+                }
+            }
+        },
+         "/getProvince": {
+                "get": {
+                    "tags":[
+                        "ACCOUNT"
+                    ],
+                    "responses":{
+                        "200": {
+                            "description":"SUKSES"
+                        }
+                    }
+                }
+    
+            },
+        "/putProvince": {
+            "put" :{
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "name":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description":"SUKSES"
+                    }
+                }
+            }
+        },
+        "/delProvince":{
+            "delete": {
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "id":{
+                                        "type":"integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"SUKSES"
+                    }
+                }
+            }
+        }
+    }
+  
+    
+}
