@@ -1,5 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const session = require ('express-session');
+const redis = require ('redis');
+const redisStore = require ('connect-redis')(session);
+const client = redis.createClient();
 const dotenv = require('dotenv');
 const cors = require ("cors");
 const Sequelize = require("sequelize");
@@ -12,11 +16,30 @@ dbAccount = require('./models/account/index');
 dbProduct = require('./models/product/index');
 dbTransaction = require('./models/transaction/index');
 dbPayment = require('./models/payment/index');
+dbAuth = require('./models/auth/index');
 
 const app = express();
 var corsOption = {
   origin: "http://localhost:8001"
 };
+
+/* Redis session connect */
+app.use(session({
+  secret: 'rahasialho',
+  store: new redisStore({
+    host: 'localhost', port: 6379, client: client,ttl: 260
+  }),
+  saveUninitialized: false,
+  resave: false
+})); 
+/* end */
+
+/*Connect to views */ 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(express.static(__dirname + '/views'));
 
 /* Swagger */
 const swaggerOptions = {
@@ -50,6 +73,7 @@ dbAccount.sequelize.sync();
 dbProduct.sequelize.sync();
 dbTransaction.sequelize.sync();
 dbPayment.sequelize.sync();
+dbAuth.sequelize.sync();
 
 
 /*config PORT*/
