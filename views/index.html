@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Mini-Project</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    var email,password;
+    $("#submit").click(function(){
+        email=$("#email").val();
+        password=$("#password").val();
+        /*
+        * Perform some validation here.
+        */
+        $.post("/login",{email:email,pass:password},function(data){
+            if(data==='done') {
+                window.location.href="/admin";
+            }
+        });
+    });
+});
+</script>
+</head>
+<body>
+<input type="text" size="10" placeholder="Type your email" id="email"><br />
+<input type="password" size="10" placeholder="Type your password" id="password"><br />
+<br>
+<input type="button" value="Submit" id="submit">
+</body>
+</html>
