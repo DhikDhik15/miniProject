@@ -87,7 +87,7 @@ exports.putProvince = (req, res) => {
 
 //DELETE
 exports.deleteProvince = (req, res) => {
-  const id= req.params.id;
+  const id= req.body.id;
 
   tableProvince.destroy({
     where: {id: id}
