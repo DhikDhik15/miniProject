@@ -1,7 +1,7 @@
 // configurasi untuk sequilize
 'use strict';
-var dotevn = require('dotenv');
-dotevn.config();
+var dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = {
     HOST: process.env.HOST_MINIPROJECT,
