@@ -11,8 +11,10 @@ module.exports = function (app) {
   app.route('/province').post(province.addProvince);
   app.route('/getProvince').get(province.getProvince);
   app.route('/putProvince').put(province.putProvince);
-  app.route('/delProvince/').delete(province.deleteProvince);
+  app.route('/deleteProvince').delete(province.deleteProvince);
 
   app.route('/account').post(account.addAccount);
-  app.route('/account').get(account.getAccount);
+  app.route('/getAccount').get(account.getAccount);
+  app.route('/putAccount').put(account.putAccount);
+  app.route('/deleteAccount').delete(account.deleteAccount);
 }
