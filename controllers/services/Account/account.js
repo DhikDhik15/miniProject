@@ -45,4 +45,58 @@ exports.getAccount = (req, res) => {
         });
     });
 
-}
+},
+
+// PUT
+exports.putAccount = (req, res) => {
+    const data = {
+        id: req.body.id,
+        username: req.body.username,
+        email: req.body.email,
+        phone: req.body.phone,
+        address: req.body.address,
+        id_province: req.body.id_province,
+        id_district: req.body.id_district
+    }
+    tableAccount.update(req.body, {
+        where: { id: data.id }
+    }).then(num => {
+        if (num == 1){
+            res.send({
+                message: "Update berhasil"
+        });
+        } else {
+            res.send({
+                message: `Gagal update id=${id}`
+            });
+        }
+    }).catch(err => {
+        res.status(500).send({
+            message: "Error update"
+        });
+    });
+},
+
+//DELETE
+exports.deleteAccount = (req, res) => {
+    const id= req.body.id;
+  
+    tableAccount.destroy({
+      where: {id: id}
+    }).then (num => {
+      if (num == 1){
+        res.send({
+          message: "Account was deleted"
+        });
+      } else {
+        res.send({
+          message: `Error delete id=${id}`
+        });
+      }
+    }).catch(err => {
+      res.status(500).send({
+        message: "Tidak dapat menghapus"
+      });
+    });
+  }
+  
