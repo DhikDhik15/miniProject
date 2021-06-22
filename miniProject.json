@@ -113,7 +113,138 @@
                     }
                 }
             }
+        },
+        "/account":{
+            "post": {
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "consumes": "application/json",
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "integer"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "id_province": {
+                                        "type": "integer"
+                                    },
+                                    "id_district": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SUKSES"
+                    }
+                }
+            }
+        },
+        "/getAccount":{
+            "get":{
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "responses":{
+                    "200":{
+                        "description":"SUKSES"
+                    }
+                }
+            }
+        },
+        "/putAccount": {
+            "put" :{
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "integer"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "id_province": {
+                                        "type": "integer"
+                                    },
+                                    "id_district": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description":"SUKSES"
+                    }
+                }
+            }
+        },
+        "/deleteAccount":{
+            "delete": {
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "id":{
+                                        "type":"integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"SUKSES"
+                    }
+                }
+            }
         }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
   
     
