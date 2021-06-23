@@ -1,0 +1,7 @@
+{
+    "secret": "secret-key-mini-project",
+    "refreshTokenSecret": "token-mini-project",
+    "port": 8001,
+    "tokenLife": 9000,
+    "refreshTokenLife": 86400
+}
