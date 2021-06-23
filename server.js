@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require ('express-session');
+const router = express.Router();
 /*HTTPS*/ 
 const https = require ('https');
 const path = require ('path');
@@ -19,6 +20,8 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const apiDocumentation = require('./miniProject.json');
 
+
+
 /*connect to models*/
 dbAccount = require('./models/account/index');
 dbProduct = require('./models/product/index');
@@ -33,7 +36,7 @@ var corsOption = {
 
 /* Redis session connect */
 app.use(session({
-  secret: 'rahasialho',
+  secret: 'mini-project',
   store: new redisStore({
     host: 'localhost', port: 6379, client: client,ttl: 260
   }),
@@ -92,6 +95,15 @@ app.use(express.urlencoded({
 /*ROUTES*/ 
 const routes = require('./routes/routes');
 routes(app);
+
+/*Check secure token*/ 
+
+router.get('/secure', (req, res) => {
+  res.send('Secure');
+});
+
+/*TOKEN CHECKER*/ 
+const token = require('./middleware/tokenChecker');
 
 //sync to sequilize
 dbAccount.sequelize.sync();
