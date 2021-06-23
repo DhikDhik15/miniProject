@@ -234,6 +234,60 @@
                     }
                 }
             }
+        },
+        "/district":{
+            "post": {
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "consumes": "application/json",
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "id_province": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "SUKSES"
+                    }
+                }
+            }
+        },
+        "/getDistrict/{id}":{
+            "get":{
+                "tags":[
+                    "ACCOUNT"
+                ],
+                "parameters":[
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema":{
+                            "type":"integer"
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"SUKSES"
+                    },
+                    "404":{
+                        "description": "NOT FOUND"
+                    }
+                }
+            }
         }
 
     
