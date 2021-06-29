@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require ('express-session');
 const router = express.Router();
+const helmet = require('helmet');
+
+
 /*HTTPS*/ 
 const https = require ('https');
 const path = require ('path');
@@ -20,8 +23,6 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const apiDocumentation = require('./miniProject.json');
 
-
-
 /*connect to models*/
 dbAccount = require('./models/account/index');
 dbProduct = require('./models/product/index');
@@ -33,6 +34,13 @@ const app = express();
 var corsOption = {
   origin: "http://localhost:8001"
 };
+
+/* Helmet */ 
+app.use(helmet());
+/* end */
+
+/* Call Assets */ 
+app.use('/assets',express.static('assets'));
 
 /* Redis session connect */
 app.use(session({
