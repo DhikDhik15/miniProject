@@ -20,8 +20,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.miniproject = require("./product.model.js")(sequelize, Sequelize);
-//db.miniproject = require("./stock.model.js")(sequelize, Sequelize);
-db.miniproject = require("./category.model.js")(sequelize, Sequelize);
+db.product = require("./product.model.js")(sequelize, Sequelize);
+db.category = require("./category.model.js")(sequelize, Sequelize);
 
 module.exports = db;

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Stock = sequelize.define("stock", {
+  const Category = sequelize.define("category", {
     name: {
       type: Sequelize.STRING
     }
@@ -10,5 +10,5 @@ module.exports = (sequelize, Sequelize) => {
       freezeTableName: true,
   });
 
-  return Stock;
+  return Category;
 };
