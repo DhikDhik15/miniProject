@@ -1,11 +1,26 @@
 const { district } = require('../models/account');
+const multer = require('multer');
 
+/* connection to upload */ 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './assets/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "--" + file.originalname)
+  }
+});
+const upload = multer({
+  storage: storage
+});
+/* end connection */ 
 
 module.exports = function (app) {
   var province = require('../controllers/services/Account/province');
   var account = require('../controllers/services/Account/account');
   var auth = require('../controllers/services/Auth/users');
   var district = require('../controllers/services/Account/district');
+  var product = require('../controllers/services/Product/product');
 
   
   app.route('/').get(auth.getUser);
@@ -26,4 +41,7 @@ module.exports = function (app) {
 
   app.route('/district').post(district.addDistrict);
   app.route('/getDistrict/:id').get(district.getDistrict);
+
+  app.route('/product', upload.single('images')).post(product.addProduct);
+
 }
