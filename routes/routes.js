@@ -1,18 +1,38 @@
 const { district } = require('../models/account');
 const multer = require('multer');
+const express = require('express');
+const app = express();
+
 
 /* connection to upload */ 
-const storage = multer.diskStorage({
+const fileStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './assets/')
+    cb(null, 'assets')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "--" + file.originalname)
+    cb(null, Date.now().getTime() + "--" + file.originalname)
   }
 });
 const upload = multer({
-  storage: storage
-});
+  storage: fileStorage,
+  dest: "assets"
+})
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'img/png' ||
+    file.mimetype === 'img/jpg' ||
+    file.mimetype === 'img/jpeg'
+  ){
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
+
+app.use(multer({
+  storage: fileStorage, fileFilter: fileFilter
+}).single('image'));
 /* end connection */ 
 
 module.exports = function (app) {
@@ -21,6 +41,7 @@ module.exports = function (app) {
   var auth = require('../controllers/services/Auth/users');
   var district = require('../controllers/services/Account/district');
   var product = require('../controllers/services/Product/product');
+  var category = require('../controllers/services/Product/category');
 
   
   app.route('/').get(auth.getUser);
@@ -42,6 +63,11 @@ module.exports = function (app) {
   app.route('/district').post(district.addDistrict);
   app.route('/getDistrict/:id').get(district.getDistrict);
 
-  app.route('/product', upload.single('images')).post(product.addProduct);
+  app.route('/product', upload.single('image')).post(product.addProduct);
+
+
+  
+  app.route('/category').post(category.addCategory);
+  //app.route('/product').post(product.addProduct);
 
 }
