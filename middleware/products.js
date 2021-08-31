@@ -1,0 +1,26 @@
+'use strict';
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, path.join(__dirname,'../../uploads'));
+    },
+    filename: function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+module.exports = multer({
+    storage: storage,
+    fileFilter: function (req, file, callback) {
+        var ext = path.extname(file.originalname);
+        if(ext !== '.png' && ext !== '.jpeg' && ext !== '.jpg') {
+            return callback(new Error('Only Images allowed'))
+        }
+        callback(null, true)
+    },
+    limits: {
+         fields: 5, files: 1
+    },
+  }).single('images');
