@@ -1,39 +1,25 @@
 var dbProduct = require ('../../../models/product/index');
 var tableProduct = dbProduct.product;
-const sequelize = require('sequelize');
+
 
 /* POST */
-exports.addProduct = (req,res) => {
+// exports.addProduct = (req,res) => {
+
+//     const storage = multer.diskStorage({
+//         destination: path.join('uploads'),
+          
+//         filename: function (req, file, cb) {
+//             cb(null, file.fieldname + '-' + Date.now() +
+//             path.extname(file.originalname));
+//         }
+//     });
     
-    console.log(req.file);
-      
-    const add = {
-        name: req.body.name,
-        id_category: req.body.id_category,
-        price: req.body.price,
-        image: req.file,
-        stock: req.body.stock
-    }  
+//     const upload = multer({storage: storage}).single('image');
 
-    tableProduct.create(add)
-    .then(data => {
-        res.status(200).json({
-            message: 'Berhasil',
-            data: data
-        });
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message
-        });
-    });
-
-//  if (!add.name || !add.id_category || !add.price || !add.image || !add.stock){
-//     res.status(422).json({
-//         message: 'Form cannot be null'
-//     })
-//     return;
-// } else {
+//     const add = {
+//         name: req.body.name,
+//         image: req.file.path
+//     }  
 //     tableProduct.create(add)
 //     .then(data => {
 //         res.status(200).json({
@@ -46,5 +32,40 @@ exports.addProduct = (req,res) => {
 //             message: err.message
 //         });
 //     });
+
 // }
+exports.addProduct = async function (req, res){
+    try {
+        if (!req.body.name || req.body.images == undefined){
+            res.status(400).json({
+                message: 'Empty'
+            });
+            return;
+        }
+        const add = {
+            name: req.body.name,
+            images: req.body.filename
+        };
+        await tableProduct.findAll()
+        .then(data => {
+            if (data.length >= 3) {
+                res.status(422).json({
+                    message: 'Product sudah ada'
+                });
+            } else {
+                tableProduct.create(add)
+                .then(data => {
+                    res.status(200).json({
+                        data: data
+                    });
+                })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: 'Error'
+        });
+        
+    }
 }
