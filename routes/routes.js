@@ -1,9 +1,7 @@
 const { district } = require('../models/account');
 const express = require('express');
 const app = express();
-const multer = require ('multer');
 const uploadsP = require('../middleware/products')
-var path = require('path');
 
 
 module.exports = function (app) {
@@ -36,7 +34,7 @@ module.exports = function (app) {
   app.route('/district').post(district.addDistrict);
   app.route('/getDistrict/:id').get(district.getDistrict);
 
-  app.route('/product', uploadsP, product.addProduct);
+  app.route('/product').post(uploadsP,product.addProduct);
   
   app.route('/category').post(category.addCategory);
   
