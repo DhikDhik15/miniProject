@@ -4,7 +4,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(__dirname,'../../uploads'));
+        cb(null, path.join(__dirname,'../uploads'));
     },
     filename: function(req, file, cb){
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -23,4 +23,4 @@ module.exports = multer({
     limits: {
          fields: 5, files: 1
     },
-  }).single('images');
+  }).single('image');
