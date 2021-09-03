@@ -11,11 +11,12 @@ exports.addProduct = async function (req, res){
             id_category: req.body.id_category,
             stock: req.body.stock,
             image: req.file.filename,
+            price: req.body.price,
             description: req.body.description,
             expired: req.body.expired
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description ){
+            || !req.body.stock || !req.body.description || !req.body.price){
 
             res.status(400).json({
                 message: 'Kolom kosong'
@@ -61,7 +62,7 @@ exports.getProduct = (req, res) => {
         attributes: ['id', 'name'],
         include: [{
           model: tableProduct,
-          attributes: ['id', 'id_category', 'name', 'image', 'stock', 'description', 'expired'],
+          attributes: ['id', 'id_category', 'name', 'image','price', 'stock', 'description', 'expired'],
           order: [['id', 'ASC']]
         }]
     })
@@ -82,11 +83,12 @@ exports.putProduct = async function (req, res){
             id_category: req.body.id_category,
             stock: req.body.stock,
             image: req.file.filename,
+            price: req.body.price,
             description: req.body.description,
             expired: req.body.expired
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description){
+            || !req.body.stock || !req.body.description || !req.body.price){
             res.status(400).json({
                 message: 'Kolom kosong'
             });
@@ -97,6 +99,7 @@ exports.putProduct = async function (req, res){
                 id_category: put.id_category,
                 stock: put.stock,
                 image: put.image,
+                price: put.price,
                 description: put.description,
                 expired: put.expired
             },{
