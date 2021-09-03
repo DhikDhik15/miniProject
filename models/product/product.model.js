@@ -3,8 +3,21 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.STRING
     },
+    id_category: {
+      type: Sequelize.INTEGER
+    },
+    stock: {
+      type: Sequelize.INTEGER
+    },
     image: {
       type: Sequelize.STRING
+    },
+    description: {
+      type: Sequelize.STRING
+    }
+    ,
+    expired: {
+      type: Sequelize.DATEONLY
     }
 
   },
