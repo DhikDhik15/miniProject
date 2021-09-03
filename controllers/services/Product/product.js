@@ -83,7 +83,7 @@ exports.putProduct = async function (req, res){
             stock: req.body.stock,
             image: req.file.filename,
             description: req.body.description,
-            //expired: req.body.expired
+            expired: req.body.expired
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
             || !req.body.stock || !req.body.description){
