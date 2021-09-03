@@ -7,14 +7,14 @@ const uploadsP = require('../middleware/products')
 module.exports = function (app) {
 
 
-  var province = require('../controllers/services/Account/province');
-  var account = require('../controllers/services/Account/account');
-  var auth = require('../controllers/services/Auth/users');
-  var district = require('../controllers/services/Account/district');
-  var product = require('../controllers/services/Product/product');
-  var category = require('../controllers/services/Product/category');
+  const province = require('../controllers/services/Account/province');
+  const account = require('../controllers/services/Account/account');
+  const auth = require('../controllers/services/Auth/users');
+  const district = require('../controllers/services/Account/district');
+  const product = require('../controllers/services/Product/product');
+  const category = require('../controllers/services/Product/category');
 
-  
+
   app.route('/').get(auth.getUser);
   app.route('/login').post(auth.addUsers);
   app.route('/token').post(auth.tokenUsers);
@@ -35,8 +35,11 @@ module.exports = function (app) {
   app.route('/getDistrict/:id').get(district.getDistrict);
 
   app.route('/product').post(uploadsP,product.addProduct);
-  
+  app.route('/getProduct').get(product.getProduct);
+  app.route('/putProduct').put(product.putProduct);
+  app.route('/deleteProduct').delete(product.deleteProduct);
+
   app.route('/category').post(category.addCategory);
-  
+
 
 }
