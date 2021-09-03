@@ -40,6 +40,9 @@ module.exports = function (app) {
   app.route('/deleteProduct').delete(product.deleteProduct);
 
   app.route('/category').post(category.addCategory);
+  app.route('/getCategory').get(category.getCategory);
+  app.route('/putCategory').put(category.putCategory);
+  app.route('/deleteCategory').delete(category.deleteCategory);
 
 
 }
