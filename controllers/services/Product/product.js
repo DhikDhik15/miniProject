@@ -13,10 +13,11 @@ exports.addProduct = async function (req, res){
             image: req.file.filename,
             price: req.body.price,
             description: req.body.description,
-            expired: req.body.expired
+            expired: req.body.expired,
+            barcode: req.body.barcode
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description || !req.body.price){
+            || !req.body.stock || !req.body.description || !req.body.price || !req.body.barcode || !req.body.expired){
 
             res.status(400).json({
                 message: 'Kolom kosong'
@@ -62,7 +63,7 @@ exports.getProduct = (req, res) => {
         attributes: ['id', 'name'],
         include: [{
           model: tableProduct,
-          attributes: ['id', 'id_category', 'name', 'image','price', 'stock', 'description', 'expired'],
+          attributes: ['id', 'id_category', 'name', 'image','price', 'stock', 'description', 'expired', 'barcode'],
           order: [['id', 'ASC']]
         }]
     })
@@ -85,10 +86,11 @@ exports.putProduct = async function (req, res){
             image: req.file.filename,
             price: req.body.price,
             description: req.body.description,
-            expired: req.body.expired
+            expired: req.body.expired,
+            barcode: req.body.barcode
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description || !req.body.price){
+            || !req.body.stock || !req.body.description || !req.body.price || !req.body.barcode){
             res.status(400).json({
                 message: 'Kolom kosong'
             });
@@ -144,6 +146,27 @@ exports.deleteProduct = function (req, res){
     .catch(error => {
         res.status(500).json({
             message: error
+        });
+    })
+}
+
+/*GET REPORT OF STOCK*/
+exports.getReportStock = (req, res) => {
+    tableCategory.hasMany(tableProduct, { foreignKey: 'id_category' });
+    tableProduct.belongsTo(tableCategory, { foreignKey: 'id' });
+
+    tableCategory.findAndCountAll({
+        attributes: ['id', 'name'],
+        include: [{
+          model: tableProduct,
+          attributes: ['id', 'name', 'image', 'stock'],
+          order: [['id', 'ASC']]
+        }]
+    })
+    .then((data) => {
+        res.status(200).send({
+            data: data,
+            message: 'Report Stock of Product'
         });
     })
 }
