@@ -36,6 +36,7 @@ module.exports = function (app) {
 
   app.route('/product').post(uploadsP,product.addProduct);
   app.route('/getProduct').get(product.getProduct);
+  app.route('/reportStock').get(product.getReportStock);
   app.route('/putProduct').put(product.putProduct);
   app.route('/deleteProduct').delete(product.deleteProduct);
 
