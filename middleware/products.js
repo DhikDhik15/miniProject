@@ -21,6 +21,6 @@ module.exports = multer({
         callback(null, true)
     },
     limits: {
-         fields: 5, files: 1
+         fields: 8, files: 1
     },
   }).single('image');
