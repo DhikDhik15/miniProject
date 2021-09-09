@@ -17,10 +17,12 @@ module.exports = (sequelize, Sequelize) => {
     },
     description: {
       type: Sequelize.STRING
-    }
-    ,
+    },
     expired: {
       type: Sequelize.DATEONLY
+    },
+    barcode: {
+      type: Sequelize.INTEGER
     }
 
   },
