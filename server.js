@@ -23,13 +23,6 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 const apiDocumentation = require('./miniProject.json');
 
-/*connect to models*/
-dbAccount = require('./models/account/index');
-dbProduct = require('./models/product/index');
-dbTransaction = require('./models/transaction/index');
-dbPayment = require('./models/payment/index');
-dbAuth = require('./models/auth/index');
-
 const app = express();
 var corsOption = {
   origin: "http://localhost:8001"
@@ -113,13 +106,21 @@ router.get('/secure', (req, res) => {
 /*TOKEN CHECKER*/ 
 const token = require('./middleware/tokenChecker');
 
+/*connect to models*/
+dbAccount = require('./models/account/index');
+dbProduct = require('./models/product/index');
+dbTransaction = require('./models/transaction/index');
+dbPayment = require('./models/payment/index');
+dbAuth = require('./models/auth/index');
+dbSupplier = require('./models/product/index');
+
 //sync to sequilize
 dbAccount.sequelize.sync();
 dbProduct.sequelize.sync();
 dbTransaction.sequelize.sync();
 dbPayment.sequelize.sync();
 dbAuth.sequelize.sync();
-
+dbSupplier.sequelize.sync();
 
 /*config PORT*/
 const PORT = process.env.PORT || 8001;
