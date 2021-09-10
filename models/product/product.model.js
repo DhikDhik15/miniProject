@@ -23,6 +23,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     barcode: {
       type: Sequelize.INTEGER
+    },
+    id_supplier: {
+      type: Sequelize.INTEGER
     }
 
   },
