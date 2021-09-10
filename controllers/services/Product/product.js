@@ -1,6 +1,8 @@
 const dbProduct = require ('../../../models/product/index');
+const dbSupplier = require ('../../../models/product/index');
 const tableProduct = dbProduct.product;
 const tableCategory = dbProduct.category;
+const tableSupplier = dbSupplier.supplier;
 
 /* POST */
 exports.addProduct = async function (req, res){
@@ -9,6 +11,7 @@ exports.addProduct = async function (req, res){
         const add = {
             name: req.body.name,
             id_category: req.body.id_category,
+            id_supplier: req.body.id_supplier,
             stock: req.body.stock,
             image: req.file.filename,
             price: req.body.price,
@@ -17,7 +20,8 @@ exports.addProduct = async function (req, res){
             barcode: req.body.barcode
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description || !req.body.price || !req.body.barcode || !req.body.expired){
+            || !req.body.stock || !req.body.description || 
+            !req.body.price || !req.body.barcode || !req.body.expired || !req.body.id_supplier){
 
             res.status(400).json({
                 message: 'Kolom kosong'
@@ -58,14 +62,27 @@ exports.addProduct = async function (req, res){
 exports.getProduct = (req, res) => {
     tableCategory.hasMany(tableProduct, { foreignKey: 'id_category' });
     tableProduct.belongsTo(tableCategory, { foreignKey: 'id' });
+    
+    tableSupplier.hasMany(tableProduct, { foreignKey: 'id_supplier' });
+    tableProduct.belongsTo(tableSupplier, { foreignKey: 'id' });
 
-    tableCategory.findAndCountAll({
+    tableCategory.hasMany(tableSupplier, { foreignKey: 'id_category' });
+    tableSupplier.belongsTo(tableCategory, { foreignKey: 'id' });
+
+    tableCategory.findAll({
         attributes: ['id', 'name'],
         include: [{
-          model: tableProduct,
-          attributes: ['id', 'id_category', 'name', 'image','price', 'stock', 'description', 'expired', 'barcode'],
-          order: [['id', 'ASC']]
-        }]
+            model: tableSupplier,
+            attributes: ['id', 'supplier_name', 'brand', 'id_category'],
+            order: [['id', 'ASC' ]]
+        },
+        {
+            model: tableProduct,
+            attributes: ['id', 'name', 'id_category', 'id_supplier', 'image','price', 'stock', 'description', 'expired', 'barcode'],
+            order: [['id', 'ASC']]
+            
+        }
+    ]
     })
     .then((data) => {
         res.status(200).send({
@@ -82,6 +99,7 @@ exports.putProduct = async function (req, res){
             id: req.body.id,
             name: req.body.name,
             id_category: req.body.id_category,
+            id_supplier: req.body.id_supplier,
             stock: req.body.stock,
             image: req.file.filename,
             price: req.body.price,
@@ -90,7 +108,8 @@ exports.putProduct = async function (req, res){
             barcode: req.body.barcode
         }
         if (!req.body.name || !req.file.filename == undefined || !req.body.id_category
-            || !req.body.stock || !req.body.description || !req.body.price || !req.body.barcode){
+            || !req.body.stock || !req.body.description || !req.body.price ||
+            !req.body.barcode || !req.body.id_supplier){
             res.status(400).json({
                 message: 'Kolom kosong'
             });
@@ -99,6 +118,7 @@ exports.putProduct = async function (req, res){
             tableProduct.update({
                 name: put.name,
                 id_category: put.id_category,
+                id_supplier: put.id_supplier,
                 stock: put.stock,
                 image: put.image,
                 price: put.price,
