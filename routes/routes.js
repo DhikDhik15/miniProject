@@ -13,6 +13,7 @@ module.exports = function (app) {
   const district = require('../controllers/services/Account/district');
   const product = require('../controllers/services/Product/product');
   const category = require('../controllers/services/Product/category');
+  const supplier = require('../controllers/services/Product/supplier');
 
 
   app.route('/').get(auth.getUser);
@@ -44,6 +45,10 @@ module.exports = function (app) {
   app.route('/getCategory').get(category.getCategory);
   app.route('/putCategory').put(category.putCategory);
   app.route('/deleteCategory').delete(category.deleteCategory);
+
+  app.route('/supplier').post(supplier.addSupplier);
+  app.route('/getSupplier').get(supplier.getSupplier);
+  app.route('/putSupplier').put(supplier.putSupplier);
 
 
 }
