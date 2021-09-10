@@ -20,7 +20,5 @@ module.exports = multer({
         }
         callback(null, true)
     },
-    limits: {
-         fields: 8, files: 1
-    },
+    limits: { files: 1 },
   }).single('image');
