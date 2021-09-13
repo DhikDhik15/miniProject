@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     id_product: {
       type: Sequelize.INTEGER
     },
-    cnt_product_out: {
+    count_product_out: {
       type: Sequelize.INTEGER
     },
     left_product: {
