@@ -1,6 +1,5 @@
-var dbAccount = require('../../../models/account/index');
-var tableProvince = dbAccount.province;
-const sequelize = require('sequelize');
+const dbAccount = require('../../../models/account/index');
+const tableProvince = dbAccount.province;
 
 // POST
 exports.addProvince = (req, res) => {

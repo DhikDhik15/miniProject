@@ -1,7 +1,6 @@
-var dbAccount = require ('../../../models/account/index');
-var tableDistrict = dbAccount.district;
-var tableProvince = dbAccount.province;
-const sequelize = require ('sequelize');
+const dbAccount = require ('../../../models/account/index');
+const tableDistrict = dbAccount.district;
+const tableProvince = dbAccount.province;
 
 // POST
 exports.addDistrict = (req,res) => {
@@ -32,8 +31,8 @@ exports.addDistrict = (req,res) => {
     }
 },
 
-// GET
-exports.getDistrict = (req, res) => {
+// GET DISTRICT BY ID
+exports.getDistrictByID = (req, res) => {
     const id=  req.params.id;
     // Join Table District --> Province
     // Province (Parent) -- District (child)
@@ -49,10 +48,10 @@ exports.getDistrict = (req, res) => {
             model: tableProvince,
             attributes: ['id', 'name']
         }]
-    }).then((data) => {
+    }).then((district) => {
         res.status(200).json({
-            message: 'Data kab kota',
-            data:data
+            message: 'District',
+            data:district
         });
     })
     .catch(err => {
@@ -62,7 +61,57 @@ exports.getDistrict = (req, res) => {
     })
 }
 
-// PUT
+/*GET ALL DISTRICT*/ 
+exports.getDistrict = (req, res) => {
+    tableProvince.hasMany(tableDistrict, { foreignKey: 'id_province' }),
+    tableDistrict.belongsTo(tableProvince, { foreignKey: 'id' });
 
-// DELETE
+    tableProvince.findAll({
+        attributes: ['id', 'name'],
+        order: [['id', 'ASC']],
+        include: [{
+            model: tableDistrict,
+            attributes: ['id', 'id_province', 'name']
+        }]
+    })
+    .then((district) => {
+        res.status(200).json({
+            message: ' District ',
+            data:district
+        });
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message
+        });
+    })
+}
+/*PUT DISTRICT*/
+exports.putDistrict = (req, res) => {
+    const put = {
+        id: req.body.id,
+        id_province: req.body.id_province,
+        name: req.body.name
+    }
+    tableDistrict.update(req.body, {
+        where: { id: put.id }
+    }).then(district => {
+        if (district == 1){
+            res.send({
+                message: 'Updated' 
+            });
+        } else {
+            res.send({
+                message: 'Failed'
+            });
+        }
+    }).catch(err => {
+        res.status(500).send({
+            message: 'Error update'
+        });
+    });
+}
+
+
+
 

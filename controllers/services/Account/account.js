@@ -1,6 +1,8 @@
-var dbAccount = require ('../../../models/account/index');
-var tableAccount = dbAccount.account;
-const sequelize = require ('sequelize');
+const dbAccount = require ('../../../models/account/index');
+const tableAccount = dbAccount.account;
+const tableDistrict = dbAccount.district;
+const tableProvince = dbAccount.province;
+
 
 //POST
 exports.addAccount = (req, res) => {
@@ -36,8 +38,25 @@ exports.addAccount = (req, res) => {
 
 //GET
 exports.getAccount = (req, res) => {
-    tableAccount.findAll({
-        attributes: ['id', 'username', 'email', 'phone', 'address', 'id_province', 'id_district'],
+    tableAccount.hasOne(tableProvince, { foreignKey: 'id_province' });
+    tableProvince.belongsTo(tableAccount, { foreignKey: 'id' });
+
+    tableAccount.hasOne(tableDistrict, { foreignKey: 'id_district' });
+    tableDistrict.belongsTo(tableAccount, { foreignKey: 'id' });
+
+    tableProvince.hasMany(tableDistrict, { foreignKey: 'id' }),
+    tableDistrict.belongsTo(tableProvince, { foreignKey: 'id_province' });
+
+    tableProvince.findAll({
+        attributes: ['id', 'name'],
+        order: [['id', 'ASC']],
+        include: [{
+            model: tableDistrict,
+            attributes: ['id', 'id_province', 'name']
+        },{
+            model: tableAccount,
+            attributes: ['id', 'username', 'email', 'phone', 'address', 'id_province', 'id_district'],
+        }]
     }).then ((data) => {
         res.status(200).send({
             data:data,
