@@ -31,14 +31,14 @@ exports.addSupplier = (req, res) => {
 /*GET*/
 exports.getSupplier = (req, res) => {
 
-    tableCategory.hasMany(tableSupplier, { foreignKey: 'id' });
-    tableSupplier.belongsTo(tableCategory, { foreignKey: 'id_category' });
+    tableCategory.hasMany(tableSupplier, { foreignKey: 'id_category' });
+    tableSupplier.belongsTo(tableCategory, { foreignKey: 'id' });
 
     tableCategory.findAll({
         attributes: ['id', 'name'],
         include:[{
             model: tableSupplier,
-            attributes: ['id', 'supplier_name', 'address', 'phone', 'brand', 'id_category', 'description'],
+            attributes: ['id', 'id_category', 'supplier_name', 'address', 'phone', 'brand', 'description'],
             order: [['id', 'ASC']]
         }]
     }).then((data) => {

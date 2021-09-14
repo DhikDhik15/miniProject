@@ -25,22 +25,43 @@ exports.addOpname = (req, res) => {
         });
     });
 }
+
 /*GET*/
 exports.getOpname = (req, res) => {
-    tableOpname.hasMany(tableProduct, { foreignKey: 'id' });
-    tableProduct.belongsTo(tableOpname, { foreignKey: 'id_product' });
+    tableProduct.hasOne(tableOpname, { foreignKey: 'id_product' });
+    tableOpname.belongsTo(tableProduct);
 
-    tableOpname.findAll({
-        attributes:['id', 'id_product', 'count_product_out', 'left_product', 'req_product', 'in_product', 'description'],
+    tableProduct.findAll({
+        attributes: ['id', 'name', 'stock'],
         order: [['id', 'ASC']],
         include: [{
-            model: tableProduct,
-            attributes: ['id', 'name'],
+            model: tableOpname,
+            attributes:['id', 'id_product', 'count_product_out', 'left_product', 'req_product', 'in_product', 'description'],
         }]
     }).then((opname) => {
         res.status(200).send({
             data: opname,
-            message: 'Barang Opname'
+            message: 'Product Opname'
+        });
+    })
+} 
+
+/*GET BY PRODUCT*/
+exports.getOpnameById = (req, res) => {
+    const id= req.body.id
+    tableProduct.hasOne(tableOpname, { foreignKey: 'id_product' });
+    tableProduct.findAll({
+        attributes: ['id', 'name', 'stock'],
+        where: {id: id},
+        order: [['id', 'ASC']],
+        include: [{
+            model: tableOpname,
+            attributes:['id', 'id_product', 'count_product_out', 'left_product', 'req_product', 'in_product', 'description'],
+        }]
+    }).then((opname) => {
+        res.status(200).send({
+            data: opname,
+            message: 'Product Opname'
         });
     })
 } 
