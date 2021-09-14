@@ -14,6 +14,7 @@ module.exports = function (app) {
   const category = require('../controllers/services/Product/category');
   const supplier = require('../controllers/services/Product/supplier');
   const opname = require('../controllers/services/Product/opnameStock');
+  const orderProduct = require('../controllers/services/Product/orderProduct');
 
 
   app.route('/').get(auth.getUser);
@@ -44,6 +45,7 @@ module.exports = function (app) {
   app.route('/deleteProduct').delete(product.deleteProduct);
 
   app.route('/getOpname').get(opname.getOpname);
+  app.route('/getOpnameById').get(opname.getOpnameById);
   app.route('/opname').post(opname.addOpname);
 
   app.route('/category').post(category.addCategory);
@@ -54,6 +56,13 @@ module.exports = function (app) {
   app.route('/supplier').post(supplier.addSupplier);
   app.route('/getSupplier').get(supplier.getSupplier);
   app.route('/putSupplier').put(supplier.putSupplier);
+
+  app.route('/orderProduct').post(orderProduct.addOrderProduct);
+  app.route('/getOrderProduct').get(orderProduct.getOrderProduct);
+  app.route('/getOrderProductByDate').get(orderProduct.getOrderProductbyDate);
+  app.route('/putOrderProduct').put(orderProduct.putOrderProduct);
+
+
 
 
 }
