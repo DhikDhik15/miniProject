@@ -113,6 +113,7 @@ dbTransaction = require('./models/transaction/index');
 dbPayment = require('./models/payment/index');
 dbAuth = require('./models/auth/index');
 dbSupplier = require('./models/product/index');
+dbOrderProduct = require('./models/product/index');
 
 //sync to sequilize
 dbAccount.sequelize.sync();
@@ -121,6 +122,7 @@ dbTransaction.sequelize.sync();
 dbPayment.sequelize.sync();
 dbAuth.sequelize.sync();
 dbSupplier.sequelize.sync();
+dbOrderProduct.sequelize.sync();
 
 /*config PORT*/
 const PORT = process.env.PORT || 8001;
