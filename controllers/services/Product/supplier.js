@@ -1,3 +1,4 @@
+'use strict';
 const dbSupplier = require('../../../models/product/index');
 const dbCategory = require('../../../models/product/index');
 const tableSupplier = dbSupplier.supplier;

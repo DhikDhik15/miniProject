@@ -1,3 +1,4 @@
+'use strict';
 const dbProduct = require('../../../models/product/index');
 const tableCategory = dbProduct.category;
 

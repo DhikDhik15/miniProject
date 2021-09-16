@@ -1,3 +1,4 @@
+'use strict';
 const dbProduct = require('../../../models/product/index');
 const tableOrderProduct = dbProduct.order_product;
 const tableSupplier = dbProduct.supplier;
@@ -8,6 +9,7 @@ exports.addOrderProduct = (req, res) => {
         name_product: req.body.name_product,
         id_supplier: req.body.id_supplier,
         qty: req.body.qty,
+        image: req.file.filename,
         date_order: req.body.date_order,
         description: req.body.description
     }
@@ -31,7 +33,7 @@ exports.getOrderProduct = (req, res) => {
     tableOrderProduct.belongsTo(tableSupplier, { foreignKey: 'id_supplier' });
 
     tableOrderProduct.findAll({
-        attributes: ['id', 'id_supplier', 'name_product', 'qty', 'date_order', 'description'],
+        attributes: ['id', 'id_supplier', 'name_product', 'qty', 'image', 'date_order', 'description'],
         include:[{
             model: tableSupplier,
             attributes: ['id', 'supplier_name', 'brand']
@@ -52,7 +54,7 @@ exports.getOrderProductbyDate = (req, res) => {
     tableOrderProduct.belongsTo(tableSupplier, { foreignKey: 'id_supplier' });
 
     tableOrderProduct.findAll({
-        attributes: ['id', 'id_supplier', 'name_product', 'qty', 'date_order', 'description'],
+        attributes: ['id', 'id_supplier', 'name_product', 'qty', 'image', 'date_order', 'description'],
         where: { date_order: date_order },
         include:[{
             model: tableSupplier,
@@ -73,6 +75,7 @@ exports.putOrderProduct = (req, res) => {
         id_supplier: req.body.id_supplier,
         name_product: req.body.name_product,
         qty: req.body.qty,
+        image: req.file.filename,
         date_order: req.body.date_order,
         description: req.body.description
     }
@@ -80,6 +83,7 @@ exports.putOrderProduct = (req, res) => {
         id_supplier: put.id_supplier,
         name_product: put.name_product,
         qty: put.qty,
+        image: put.image,
         date_order: put.date_order,
         description: put.description
     },{

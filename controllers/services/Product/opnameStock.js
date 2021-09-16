@@ -1,3 +1,4 @@
+'use strict';
 const dbProduct = require('../../../models/product/index');
 const tableProduct = dbProduct.product;
 const tableOpname = dbProduct.opname;
@@ -50,6 +51,8 @@ exports.getOpname = (req, res) => {
 exports.getOpnameById = (req, res) => {
     const id= req.body.id
     tableProduct.hasOne(tableOpname, { foreignKey: 'id_product' });
+    tableOpname.belongsTo(tableProduct);
+
     tableProduct.findAll({
         attributes: ['id', 'name', 'stock'],
         where: {id: id},
