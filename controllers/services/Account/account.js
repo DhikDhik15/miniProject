@@ -1,3 +1,4 @@
+'use strict';
 const dbAccount = require ('../../../models/account/index');
 const tableAccount = dbAccount.account;
 const tableDistrict = dbAccount.district;
