@@ -12,11 +12,12 @@ exports.addAccount = (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         address: req.body.address,
+        image: req.file.filename,
         id_province: req.body.id_province,
         id_district: req.body.id_district
     }
 
-    if (!post.username || !post.email || !post.phone || !post.address || !post.id_province || !post.id_district){
+    if (!post.username || !post.email || !post.phone || !post.address || !post.id_province || !post.id_district || !post.image == undefined){
         res.status(422).json({
             message: 'Form cannot be null'
         })
@@ -39,24 +40,25 @@ exports.addAccount = (req, res) => {
 
 //GET
 exports.getAccount = (req, res) => {
-    tableAccount.hasOne(tableProvince, { foreignKey: 'id_province' });
-    tableProvince.belongsTo(tableAccount, { foreignKey: 'id' });
+    tableProvince.hasMany(tableAccount, {foreignKey: 'id_province'});
+    tableAccount.belongsTo(tableProvince, { foreignKey: 'id' });
 
     tableAccount.hasOne(tableDistrict, { foreignKey: 'id_district' });
     tableDistrict.belongsTo(tableAccount, { foreignKey: 'id' });
 
-    tableProvince.hasMany(tableDistrict, { foreignKey: 'id' }),
-    tableDistrict.belongsTo(tableProvince, { foreignKey: 'id_province' });
+    tableProvince.hasMany(tableDistrict, { foreignKey: 'id_province' }),
+    tableDistrict.belongsTo(tableProvince, { foreignKey: 'id' });
 
     tableProvince.findAll({
         attributes: ['id', 'name'],
-        order: [['id', 'ASC']],
-        include: [{
+        include: [
+            {
+            model: tableAccount,
+            attributes: ['id', 'username', 'email', 'phone', 'address', 'image', 'id_province', 'id_district'],        
+        },
+        {
             model: tableDistrict,
             attributes: ['id', 'id_province', 'name']
-        },{
-            model: tableAccount,
-            attributes: ['id', 'username', 'email', 'phone', 'address', 'id_province', 'id_district'],
         }]
     }).then ((data) => {
         res.status(200).send({
@@ -75,6 +77,7 @@ exports.putAccount = (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         address: req.body.address,
+        image: req.file.filename,
         id_province: req.body.id_province,
         id_district: req.body.id_district
     }
