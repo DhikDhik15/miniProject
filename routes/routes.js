@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const uploadsP = require('../middleware/products');
 const uploadOP = require('../middleware/orderProduct');
+const uploadUs = require('../middleware/account');
 
 module.exports = function (app) {
   
@@ -32,9 +33,9 @@ module.exports = function (app) {
   app.route('/deleteProvince').delete(province.deleteProvince);
 
 /*ACCOUNT*/ 
-  app.route('/account').post(account.addAccount);
+  app.route('/account').post(uploadUs, account.addAccount);
   app.route('/getAccount').get(account.getAccount);
-  app.route('/putAccount').put(account.putAccount);
+  app.route('/putAccount').put(uploadUs, account.putAccount);
   app.route('/deleteAccount').delete(account.deleteAccount);
 
 /*DISTRICT*/ 
