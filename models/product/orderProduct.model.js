@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
         qty: {
             type: Sequelize.INTEGER
         },
+        image: {
+            type: Sequelize.STRING
+        },
         date_order: {
             type: Sequelize.DATEONLY
         },
