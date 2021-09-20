@@ -3,6 +3,7 @@ const app = express();
 const uploadsP = require('../middleware/products');
 const uploadOP = require('../middleware/orderProduct');
 const uploadUs = require('../middleware/account');
+const mongoUpload = require('../middleware/uploadProduct');
 
 module.exports = function (app) {
   
@@ -18,6 +19,9 @@ module.exports = function (app) {
   const transaction = require('../controllers/services/Transaction/paymentMethod');
   const status = require('../controllers/services/Transaction/statusTransaction');
   const reportBuy = require('../controllers/services/Report/reportBuy');
+  const cart = require('../controllers/services/mongo/carts');
+
+  const Product = require('../controllers/services/mongo/product');
 
 /*AUTH*/ 
   app.route('/').get(auth.getUser);
@@ -47,9 +51,16 @@ module.exports = function (app) {
 /*PRODUCT*/ 
   app.route('/product').post(uploadsP,product.addProduct);
   app.route('/getProduct').get(product.getProduct);
+  app.route('/getProductById').get(product.getProductByID);
   app.route('/reportStock').get(product.getReportStock);
   app.route('/putProduct').put(uploadsP, product.putProduct);
   app.route('/deleteProduct').delete(product.deleteProduct);
+
+/*PRODUCT BY MONGO*/
+  app.route('/products').post(mongoUpload.upload.single('image'),Product.createProduct )
+  app.route('/getProducts').get(Product.getProducts);
+  app.route('/getProducts/:id').get(Product.getProductById);
+  app.route('/deleteProducts/:id').delete(Product.removeProduct);
 
 /*OPNAME PRODUCT*/ 
   app.route('/getOpname').get(opname.getOpname);
@@ -84,5 +95,11 @@ module.exports = function (app) {
 /*REPORT*/
   app.route('/reportBuy').get(reportBuy.getReportBuy);
   app.route('/reportBuyByDate').get(reportBuy.getReporyByDate);
+
+/*CART*/
+  app.route('/addCart').post(cart.addItemToCart);
+  app.route('/getCart').get(cart.getCart);
+  app.route('/deleteCart').delete(cart.emptyCart);
+  app.route('/deleteItem/:_id').delete(cart.removeItemCart);
 
 }
