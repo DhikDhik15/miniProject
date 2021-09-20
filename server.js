@@ -3,7 +3,8 @@ const bodyParser = require("body-parser");
 const session = require ('express-session');
 const router = express.Router();
 const helmet = require('helmet');
-
+const morgan = require('morgan');
+const {MongoClient} = require('mongodb');
 
 /*HTTPS*/ 
 const https = require ('https');
@@ -25,14 +26,19 @@ const apiDocumentation = require('./miniProject.json');
 
 const app = express();
 var corsOption = {
-  origin: "http://localhost:8001"
+  origin: "https://localhost:8001"
 };
+
+// log only 4xx and 5xx responses to console
+app.use(morgan('dev', {
+  skip: function (req, res) { return res.statusCode < 400 }
+}))
 
 /* Helmet */ 
 app.use(helmet());
 /* end */
 
-/* Call Assets */ 
+/* Call Assets 
 app.use('/assets',express.static('assets'));
 
 /* Redis session connect */
@@ -125,5 +131,16 @@ dbOrderProduct.sequelize.sync();
 /*config PORT*/
 const PORT = process.env.PORT || 8001;
 sslServer.listen(PORT, () => {
-  console.log(`Secure connection on PORT ${PORT}.`);
+  console.log(`Data connection on PORT ${PORT}.`);
+});
+
+/*MONGODB*/
+const mongoose = require('mongoose');
+const PORT_TRANSACTION = process.env.PORT_TRANSACTION || 27017
+
+mongoose.connect('mongodb://localhost:27017/transaction', { useNewUrlParser: true });
+mongoose.connection.once('open', function(){
+  console.log(`Transaction connected on PORT ${PORT_TRANSACTION}`);
+}).on('error', function(error){
+  console.log('error is:', error);
 });
