@@ -93,6 +93,44 @@ exports.getProduct = (req, res) => {
     })
 }
 
+/*GET BY ID*/
+exports.getProductByID = (req, res) => {
+    const id = req.body.id
+
+    tableCategory.hasMany(tableProduct, { foreignKey: 'id_category' });
+    tableProduct.belongsTo(tableCategory, { foreignKey: 'id' });
+    
+    tableSupplier.hasMany(tableProduct, { foreignKey: 'id_supplier' });
+    tableProduct.belongsTo(tableSupplier, { foreignKey: 'id' });
+
+    tableCategory.hasMany(tableSupplier, { foreignKey: 'id_category' });
+    tableSupplier.belongsTo(tableCategory, { foreignKey: 'id' });
+
+    tableCategory.findAll({
+        attributes: ['id', 'name'],
+        include: [{
+            model: tableSupplier,
+            attributes: ['id', 'supplier_name', 'brand', 'id_category'],
+            order: [['id', 'ASC' ]]
+        },
+        {
+            model: tableProduct,
+            attributes: ['id', 'name', 'id_category', 'id_supplier', 'image','price', 'stock', 'description', 'expired', 'barcode'],
+            where: { id: id },
+            order: [['id', 'ASC']]
+            
+        }
+    ]
+    })
+    .then((data) => {
+        res.status(200).send({
+            data: data,
+            message: 'List Product'
+        });
+    })
+}
+
+
 /*PUT*/
 exports.putProduct = async function (req, res){
     try {
