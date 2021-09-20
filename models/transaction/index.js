@@ -21,7 +21,6 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.transaction = require("./transaction.model.js")(sequelize, Sequelize);
-db.cart = require("./cart.model.js")(sequelize, Sequelize);
 db.statusTransaction = require("./statusTransaction.model.js")(sequelize, Sequelize);
 db.paymentModel = require("./payment.model")(sequelize, Sequelize);
 db.paymentMethod = require("./paymentMethod.model")(sequelize, Sequelize);
