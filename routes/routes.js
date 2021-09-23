@@ -3,7 +3,7 @@ const app = express();
 const uploadsP = require('../middleware/products');
 const uploadOP = require('../middleware/orderProduct');
 const uploadUs = require('../middleware/account');
-const mongoUpload = require('../middleware/uploadProduct');
+const mongoUpload = require('../middleware/mongo/uploadProduct');
 
 module.exports = function (app) {
   
@@ -19,9 +19,11 @@ module.exports = function (app) {
   const transaction = require('../controllers/services/Transaction/paymentMethod');
   const status = require('../controllers/services/Transaction/statusTransaction');
   const reportBuy = require('../controllers/services/Report/reportBuy');
-  const cart = require('../controllers/services/mongo/carts');
-
-  const Product = require('../controllers/services/mongo/product');
+ 
+  const Cart = require('../controllers/services/Transaction/mongo/carts');
+  const Product = require('../controllers/services/Product/mongo/product');
+  const Category = require('../controllers/services/Product/mongo/category');
+  const Supplier = require('../controllers/services/Product/mongo/supplier');
 
 /*AUTH*/ 
   app.route('/').get(auth.getUser);
@@ -73,10 +75,18 @@ module.exports = function (app) {
   app.route('/putCategory').put(category.putCategory);
   app.route('/deleteCategory').delete(category.deleteCategory);
 
+  /*BY MONGO*/
+  app.route('/').post(Category.createCategory);
+  app.route('/get').get(Category.getCategory);
+
 /*SUPPLIER*/ 
   app.route('/supplier').post(supplier.addSupplier);
   app.route('/getSupplier').get(supplier.getSupplier);
   app.route('/putSupplier').put(supplier.putSupplier);
+
+  /*BY MONGO*/
+  app.route('/add').post(Supplier.addSupplier);
+  app.route('/getS').get(Supplier.getSupplier); 
 
 /*ORDER PRODUCT*/ 
   app.route('/orderProduct').post(uploadOP, orderProduct.addOrderProduct);
@@ -97,9 +107,9 @@ module.exports = function (app) {
   app.route('/reportBuyByDate').get(reportBuy.getReporyByDate);
 
 /*CART*/
-  app.route('/addCart').post(cart.addItemToCart);
-  app.route('/getCart').get(cart.getCart);
-  app.route('/deleteCart').delete(cart.emptyCart);
-  app.route('/deleteItem/:_id').delete(cart.removeItemCart);
+  app.route('/addCart').post(Cart.addItemToCart);
+  app.route('/getCart').get(Cart.getCart);
+  app.route('/deleteCart').delete(Cart.emptyCart);
+  app.route('/deleteItem').delete(Cart.removeItemCart);
 
 }
