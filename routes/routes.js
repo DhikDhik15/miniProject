@@ -4,6 +4,7 @@ const uploadsP = require('../middleware/products');
 const uploadOP = require('../middleware/orderProduct');
 const uploadUs = require('../middleware/account');
 const mongoUpload = require('../middleware/mongo/uploadProduct');
+const orderUpload = require('../middleware/mongo/uploadOrderProduct');
 
 module.exports = function (app) {
   
@@ -24,6 +25,7 @@ module.exports = function (app) {
   const Product = require('../controllers/services/Product/mongo/product');
   const Category = require('../controllers/services/Product/mongo/category');
   const Supplier = require('../controllers/services/Product/mongo/supplier');
+  const Order = require('../controllers/services/Product/mongo/orderProduct');
 
 /*AUTH*/ 
   app.route('/').get(auth.getUser);
@@ -58,7 +60,6 @@ module.exports = function (app) {
   app.route('/putProduct').put(uploadsP, product.putProduct);
   app.route('/deleteProduct').delete(product.deleteProduct);
 
-/*PRODUCT BY MONGO*/
   app.route('/products').post(mongoUpload.upload.single('image'),Product.createProduct )
   app.route('/getProducts').get(Product.getProducts);
   app.route('/getProducts/:id').get(Product.getProductById);
@@ -75,7 +76,6 @@ module.exports = function (app) {
   app.route('/putCategory').put(category.putCategory);
   app.route('/deleteCategory').delete(category.deleteCategory);
 
-  /*BY MONGO*/
   app.route('/').post(Category.createCategory);
   app.route('/get').get(Category.getCategory);
 
@@ -84,7 +84,6 @@ module.exports = function (app) {
   app.route('/getSupplier').get(supplier.getSupplier);
   app.route('/putSupplier').put(supplier.putSupplier);
 
-  /*BY MONGO*/
   app.route('/add').post(Supplier.addSupplier);
   app.route('/getS').get(Supplier.getSupplier); 
 
@@ -93,6 +92,9 @@ module.exports = function (app) {
   app.route('/getOrderProduct').get(orderProduct.getOrderProduct);
   app.route('/getOrderProductByDate').get(orderProduct.getOrderProductbyDate);
   app.route('/putOrderProduct').put(uploadOP, orderProduct.putOrderProduct);
+
+  app.route('/addOrder').post(orderUpload.upload.single('image'), Order.createOrder);
+  app.route('/getOrder').get(Order.getOrder);
 
 /*PAYMENT METHOD*/ 
   app.route('/paymentMethod').post(transaction.addMethod);
