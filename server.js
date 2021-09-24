@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require ('express-session');
+const mongoSession = require ('connect-mongodb-session')(session);
 const router = express.Router();
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -10,10 +11,6 @@ const {MongoClient} = require('mongodb');
 const https = require ('https');
 const path = require ('path');
 const fs = require ('fs');
-/*REDIS*/ 
-const redis = require ('redis');
-const redisStore = require ('connect-redis')(session);
-const client = redis.createClient();
 /*.ENV*/ 
 const dotenv = require('dotenv');
 /*CORS*/ 
@@ -41,15 +38,27 @@ app.use(helmet());
 /* Call Assets 
 app.use('/assets',express.static('assets'));
 
-/* Redis session connect */
-app.use(session({
-  secret: 'mini-project',
-  store: new redisStore({
-    host: 'localhost', port: 6379, client: client,ttl: 260
-  }),
-  saveUninitialized: false,
-  resave: false
-})); 
+/*Session Connect*/
+const store= new mongoSession({
+  uri: process.env.MONGO_URL,
+  databaseName: 'transaction',
+  collection: 'carts'
+});
+
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+
+app.use(require('express-session')({
+  secret: 'miniProject',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 //1 week 
+  },
+  resave: true,
+  store: store,
+  saveUninitialized: true
+}));
 /* end */
 
 /*HTTPS connection*/
@@ -128,7 +137,7 @@ dbAuth.sequelize.sync();
 dbSupplier.sequelize.sync();
 dbOrderProduct.sequelize.sync();
 
-/*config PORT*/
+/*PORT*/
 const PORT = process.env.PORT || 8001;
 sslServer.listen(PORT, () => {
   console.log(`Data connection on PORT ${PORT}.`);
@@ -138,7 +147,7 @@ sslServer.listen(PORT, () => {
 const mongoose = require('mongoose');
 const PORT_TRANSACTION = process.env.PORT_TRANSACTION || 27017
 
-mongoose.connect('mongodb://localhost:27017/transaction', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 mongoose.connection.once('open', function(){
   console.log(`Transaction connected on PORT ${PORT_TRANSACTION}`);
 }).on('error', function(error){
