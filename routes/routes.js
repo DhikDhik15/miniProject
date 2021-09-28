@@ -8,6 +8,7 @@ const orderUpload = require('../middleware/mongo/uploadOrderProduct');
 
 module.exports = function (app) {
   
+  /*BALANCE DATA (psql)*/ 
   const province = require('../controllers/services/Account/province');
   const account = require('../controllers/services/Account/account');
   const auth = require('../controllers/services/Auth/users');
@@ -18,14 +19,17 @@ module.exports = function (app) {
   const opname = require('../controllers/services/Product/opnameStock');
   const orderProduct = require('../controllers/services/Product/orderProduct');
   const transaction = require('../controllers/services/Transaction/paymentMethod');
+  const order = require('../controllers/services/Transaction/order');
   const status = require('../controllers/services/Transaction/statusTransaction');
   const reportBuy = require('../controllers/services/Report/reportBuy');
  
+  /*MERCHANT DATA (mongo)*/ 
   const Cart = require('../controllers/services/Transaction/mongo/carts');
   const Product = require('../controllers/services/Product/mongo/product');
   const Category = require('../controllers/services/Product/mongo/category');
   const Supplier = require('../controllers/services/Product/mongo/supplier');
   const Order = require('../controllers/services/Product/mongo/orderProduct');
+  const Buyer = require('../controllers/services/Transaction/mongo/buyer');
 
 /*AUTH*/ 
   app.route('/').get(auth.getUser);
@@ -113,5 +117,12 @@ module.exports = function (app) {
   app.route('/getCart').get(Cart.getCart);
   app.route('/deleteCart').delete(Cart.emptyCart);
   app.route('/deleteItem').delete(Cart.removeItemCart);
+
+  /*ORDER*/
+  app.route('/order').get(order.getProduct);
+
+/*TRANSACTION*/
+  app.route('/transaction').post(Buyer.addTransaction);
+  app.route('/getTransaction').get(Buyer.getTransaction);
 
 }
