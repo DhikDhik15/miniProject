@@ -8,9 +8,9 @@ const morgan = require('morgan');
 const {MongoClient} = require('mongodb');
 
 /*HTTPS*/ 
-const https = require ('https');
-const path = require ('path');
-const fs = require ('fs');
+// const https = require ('https');
+// const path = require ('path');
+// const fs = require ('fs');
 /*.ENV*/ 
 const dotenv = require('dotenv');
 /*CORS*/ 
@@ -70,10 +70,10 @@ app.use(require('express-session')({
       (rename extension file csr.epm become csr.pem)
   3.  Generate SSL certification from CSR
       openssl x509 -req -days 365 -in csr.pem -signkey key.pem -out cert.pem */  
-const sslServer = https.createServer({
-  key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
-}, app)
+// const sslServer = https.createServer({
+//   key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+//   cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+// }, app)
 
 /*end connection*/  
 
@@ -139,9 +139,10 @@ dbOrderProduct.sequelize.sync();
 
 /*PORT*/
 const PORT = process.env.PORT || 8001;
-sslServer.listen(PORT, () => {
-  console.log(`Data connection on PORT ${PORT}.`);
-});
+// sslServer.listen(PORT, () => {
+  app.listen(PORT, () => {
+    console.log(`Balance Service on PORT ${PORT}.`);
+  });
 
 /*MONGODB*/
 const mongoose = require('mongoose');
@@ -149,7 +150,7 @@ const PORT_TRANSACTION = process.env.PORT_TRANSACTION || 27017
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 mongoose.connection.once('open', function(){
-  console.log(`Transaction connected on PORT ${PORT_TRANSACTION}`);
+  console.log(`Merchant Service on PORT ${PORT_TRANSACTION}`);
 }).on('error', function(error){
   console.log('error is:', error);
 });
