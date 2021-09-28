@@ -3,13 +3,16 @@ const Product = require ('../../models/product/mongo/product');
 
 exports.products = async () => {
     const products = await Product.find().populate({
-        path: "category supplier",
+        path: "category supplier", //JOIN IN 2 SCHEMA
         select: "name name"
     });;
     return products;
 };
 exports.productById = async id => {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate({
+        path: "category supplier",
+        select: "name name"
+    });;
     return product;
 }
 exports.createProduct = async payload => {
