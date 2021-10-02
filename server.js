@@ -39,26 +39,26 @@ app.use(helmet());
 app.use('/assets',express.static('assets'));
 
 /*Session Connect*/
-const store= new mongoSession({
-  uri: process.env.MONGO_URL,
-  databaseName: 'transaction',
-  collection: 'carts'
-});
+// const store= new mongoSession({
+//   uri: process.env.MONGO_URL,
+//   databaseName: 'transaction',
+//   collection: 'carts'
+// });
 
-// Catch errors
-store.on('error', function(error) {
-  console.log(error);
-});
+// // Catch errors
+// store.on('error', function(error) {
+//   console.log(error);
+// });
 
-app.use(require('express-session')({
-  secret: 'miniProject',
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7 //1 week 
-  },
-  resave: true,
-  store: store,
-  saveUninitialized: true
-}));
+// app.use(require('express-session')({
+//   secret: 'miniProject',
+//   cookie: {
+//     maxAge: 1000 * 60 * 60 * 24 * 7 //1 week 
+//   },
+//   resave: true,
+//   store: store,
+//   saveUninitialized: true
+// }));
 /* end */
 
 /*HTTPS connection*/
@@ -141,7 +141,7 @@ dbOrderProduct.sequelize.sync();
 const PORT = process.env.PORT || 8001;
 // sslServer.listen(PORT, () => {
   app.listen(PORT, () => {
-    console.log(`Balance Service on PORT ${PORT}.`);
+    console.log(`--->Balance Service on PORT ${PORT}.<---`);
   });
 
 /*MONGODB*/
@@ -150,7 +150,18 @@ const PORT_TRANSACTION = process.env.PORT_TRANSACTION || 27017
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 mongoose.connection.once('open', function(){
-  console.log(`Merchant Service on PORT ${PORT_TRANSACTION}`);
+  console.log(`--->Merchant Service on PORT ${PORT_TRANSACTION}<---`);
 }).on('error', function(error){
   console.log('error is:', error);
+});
+
+/*ELASTICSEARCH*/
+const { Client } = require('elasticsearch')
+const esClient = new Client({
+  node: ['http://localhost:9200'],
+  log: 'trace',
+});
+esClient.info(console.log);
+esClient.ping({
+  requestTimeout: 30000,
 });
