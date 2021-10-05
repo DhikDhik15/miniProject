@@ -1,9 +1,12 @@
 'use strict';
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
+
 const productSchema = mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Include the product name"],
+    es_indexed: true
   },
   category: {
     required: true,
@@ -33,5 +36,6 @@ const productSchema = mongoose.Schema({
     required: true
   }
 });
-const Product = mongoose.model("Product", productSchema);
+productSchema.plugin(mongoosastic);
+const Product = mongoose.model("Product", productSchema)
 module.exports = Product;
