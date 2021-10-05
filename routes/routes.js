@@ -64,7 +64,10 @@ module.exports = function (app) {
   app.route('/putProduct').put(uploadsP, product.putProduct);
   app.route('/deleteProduct').delete(product.deleteProduct);
 
-  app.route('/products').post(mongoUpload.upload.single('image'),Product.createProduct )
+  /*USE PORT 9200*/ 
+  app.route('/product/_doc').post(mongoUpload.upload.single('image'),Product.createProduct )
+  app.route('/_search').get(Product.searchProduct);
+  /*END*/ 
   app.route('/getProducts').get(Product.getProducts);
   app.route('/getProducts/:id').get(Product.getProductById);
   app.route('/deleteProducts/:id').delete(Product.removeProduct);
@@ -109,8 +112,8 @@ module.exports = function (app) {
   app.route('/getStatus').get(status.getStatus);
 
 /*REPORT*/
-  app.route('/reportBuy').get(reportBuy.getReportBuy);
-  app.route('/reportBuyByDate').get(reportBuy.getReporyByDate);
+  app.route('/report').get(reportBuy.report);
+  app.route('/reportByDate').get(reportBuy.getReporyByDate);
 
 /*CART*/
   app.route('/addCart').post(Cart.addItemToCart);
@@ -119,7 +122,8 @@ module.exports = function (app) {
   app.route('/deleteItem').delete(Cart.removeItemCart);
 
   /*ORDER*/
-  app.route('/order').get(order.getProduct);
+  app.route('/listProduct').get(order.getProduct);
+  app.route('/createOrder').post(order.postOrder);
 
 /*TRANSACTION*/
   app.route('/transaction').post(Buyer.addTransaction);
