@@ -30,7 +30,9 @@ var corsOption = {
 app.use(morgan('dev', {
   skip: function (req, res) { return res.statusCode < 400 }
 }))
-
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 /* Helmet */ 
 app.use(helmet());
 /* end */
