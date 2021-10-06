@@ -12,3 +12,10 @@ exports.addOrder = async add => {
     const newOrder = await orderProduct.create(add);
     return newOrder;
 };
+exports.orderByDate = async () => {
+    const order = await orderProduct.find(date_order).populate({
+        path: "supplier",
+        select: "name"
+    });;
+    return order;
+}
