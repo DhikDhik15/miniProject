@@ -6,6 +6,8 @@ const router = express.Router();
 const helmet = require('helmet');
 const morgan = require('morgan');
 const {MongoClient} = require('mongodb');
+const handlerMiddleware = require('./middleware/error');
+
 
 /*HTTPS*/ 
 // const https = require ('https');
@@ -79,12 +81,8 @@ app.use('/assets',express.static('assets'));
 
 /*end connection*/  
 
-/*Connect to views */ 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(express.static(__dirname + '/views'));
+/*ERROR HANDLER*/
+app.use(handlerMiddleware); 
 
 /* Swagger */
 const swaggerOptions = {
@@ -114,14 +112,6 @@ app.use(express.urlencoded({
 const routes = require('./routes/routes');
 routes(app);
 
-/*Check secure token*/ 
-
-router.get('/secure', (req, res) => {
-  res.send('Secure');
-});
-
-/*TOKEN CHECKER*/ 
-const token = require('./middleware/tokenChecker');
 
 /*connect to models*/
 dbAccount = require('./models/account/index');
