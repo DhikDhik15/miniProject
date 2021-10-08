@@ -11,7 +11,6 @@ module.exports = function (app) {
   /*BALANCE DATA (psql)*/ 
   const province = require('../controllers/services/Account/province');
   const account = require('../controllers/services/Account/account');
-  const auth = require('../controllers/services/Auth/users');
   const district = require('../controllers/services/Account/district');
   const product = require('../controllers/services/Product/product');
   const category = require('../controllers/services/Product/category');
@@ -31,13 +30,6 @@ module.exports = function (app) {
   const Order = require('../controllers/services/Product/mongo/orderProduct');
   const Buyer = require('../controllers/services/Transaction/mongo/buyer');
 
-/*AUTH*/ 
-  app.route('/').get(auth.getUser);
-  app.route('/login').post(auth.addUsers);
-  app.route('/token').post(auth.tokenUsers);
-  app.route('/admin').get(auth.getAdmin);
-  app.route('/logout').get(auth.logOut);
-
 /*PROVINCE*/ 
   app.route('/province').post(province.addProvince);
   app.route('/getProvince').get(province.getProvince);
@@ -45,10 +37,10 @@ module.exports = function (app) {
   app.route('/deleteProvince').delete(province.deleteProvince);
 
 /*ACCOUNT*/ 
-  app.route('/account').post(uploadUs, account.addAccount);
+  app.route('/register').post(uploadUs, account.addAccount);
+  app.route('/login').post(account.loginAccount);
   app.route('/getAccount').get(account.getAccount);
   app.route('/putAccount').put(uploadUs, account.putAccount);
-  app.route('/deleteAccount').delete(account.deleteAccount);
 
 /*DISTRICT*/ 
   app.route('/district').post(district.addDistrict);
