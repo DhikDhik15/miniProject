@@ -96,7 +96,7 @@ exports.loginAccount = async (req, res) => {
             message: 'Login successfully',
             user,
         });
-        res.cookie("jwt", token, {secure: true, httpOnly: ture})
+        res.cookie("jwt", token, {secure: true, httpOnly: true})
         res.send()
     }
         res.status(401).json({
