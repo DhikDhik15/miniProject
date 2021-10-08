@@ -40,7 +40,6 @@ exports.addAccount = async (req, res) => {
                 });
             }
         })
-        // encryptedPassword = await bcrypt.hash(post.password, 10);
 
         const user = await tableAccount.create(post);
 
@@ -71,14 +70,34 @@ exports.loginAccount = async (req, res) => {
         where: { email: login.email }
     });
     if(user && (await bcrypt.compare(login.password, user.password))){
+
+        /*Create token*/
         const token = jwt.sign({
             userId: user.id, login
-        }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+        }, process.env.TOKEN_KEY, {
+            algorithm: "HS256",
+            expiresIn: process.env.REFRESH_TOKEN_LIFE
+        });
+
+        /*Create refresh token*/
+        const refreshToken = jwt.sign({
+            userId: user.id, login
+        }, process.env.REFRESH_TOKEN,{
+            algorithm: "HS256",
+            expiresIn: process.env.REFRESH_TOKEN_LIFE
+        })
+        
+        /*Save refersh token*/
+        user.refreshToken = refreshToken;
+        
+        /*Save Token*/
         user.token = token;
         res.status(201).json({
             message: 'Login successfully',
             user,
         });
+        res.cookie("jwt", token, {secure: true, httpOnly: ture})
+        res.send()
     }
         res.status(401).json({
             message: 'Forbidden login !!!'
