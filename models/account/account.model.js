@@ -1,14 +1,16 @@
+
 module.exports = (sequelize, Sequelize) => {
   const Account = sequelize.define("account", {
     username: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      required: [true, "Please enter your name"]
     },
     address: {
       type: Sequelize.STRING
     },
     phone: {
-      type: Sequelize.INTEGER(12)
-     },
+      type: Sequelize.INTEGER
+    },
     image: {
       type: Sequelize.STRING
     },
@@ -19,6 +21,18 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER
     },
     email: {
+      type: Sequelize.STRING,
+      required: [true, "Please input your email"],
+      unique: true      
+    },
+    password: {
+      type: Sequelize.STRING,
+      required: [true, "Please input your password"],
+      maxLength: [8, "input max 8 characters"],
+      minLength: [6, "input minimal 6 characters"],
+      select: false
+    },
+    token: {
       type: Sequelize.STRING
     }
 
@@ -27,6 +41,5 @@ module.exports = (sequelize, Sequelize) => {
       //Mengunci nama table
       freezeTableName: true,
   });
-
   return Account;
 };
