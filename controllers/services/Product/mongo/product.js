@@ -2,36 +2,22 @@
 
 const product = require('../../../../middleware/mongo/product');
 const elasticsearch = require('elasticsearch');
-const Product = require('../../../../models/product/mongo/product');
+const cloudinary = require('cloudinary').v2;
+const dotenv = require('dotenv').config;
+const catchError = require('../../../../middleware/catchAsyncError');
 const Client = elasticsearch.Client({
     host: "http://127.0.0.1:9200",
 })
+cloudinary.config({
+    cloud_name : process.env.CLOUD_NAME,
+    api_key : process.env.CLOUD_API_KEY,
+    api_secret : process.env.CLOUD_API_SECRET
+});
 
-exports.createProduct = async (req, res) => {
+exports.createProduct = catchError (async (req, res) => {
     console.log(req.file);
-    // Client.index({
-    //     index: 'product',
-    // })    
-    // const payload = {
-    //     body: {
-    //         "name": req.body.name,
-    //         "category": req.body.category,
-    //         "supplier": req.body.supplier,
-    //         "price": req.body.price,
-    //         "stock": req.body.stock,
-    //         "barcode": req.body.barcode,
-    //         "image": req.file.filename
-    //         }
-    // }
-    // const Product = await product.createProduct({ ...payload });
-    // res.status(200).json({
-    //     status: true,
-    //     message: 'indexing successfully',
-    //     data: Product,
-    //         })    
-    // .catch(err => {
-    //     return res.status(500).json({"message": "Error"})
-    // })
+    const path = req.file.path
+    const uniqueFilename = new Date().toISOString()
     try {
         Client.index({
             index: 'product',
@@ -49,6 +35,18 @@ exports.createProduct = async (req, res) => {
         const Product = await product.createProduct({
             ...payload
         });
+        if(payload){
+            cloudinary.uploader.upload(path,{
+                public_id: `product/${uniqueFilename}`, tags: `product`
+            },
+            function(err, image){
+                if(err) return res.send(err)
+                console.log('upload to cloud')
+                const fs = require('fs')
+                fs.unlinkSync(path)
+                res.json(image)
+            })
+        }
         res.status(200).json({
             status: true,
             data: Product,
@@ -60,7 +58,8 @@ exports.createProduct = async (req, res) => {
             status: false,
         })
     }
-}
+})
+
 exports.getProducts = async (req, res) => {
     try {
         const Products = await product.products();
@@ -77,35 +76,31 @@ exports.getProducts = async (req, res) => {
     }
 }
 
-exports.getProductById = async (req, res) => {
-    try {
-        const id = req.params.id
-        const productDetails = await product.productById(id);
-        res.status(200).json({
-            status: true,
+exports.getProductById = async (req, res, next) => {
+        const productDetails = await product.productById(req.params.id);
+        if (!productDetails) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product Not Found'
+            })
+          }
+          res.status(200).json({
             data: productDetails,
         })
-    } catch (err) {
-        res.status(500).json({
-            status: false,
-            error: err
-        })
-    }
-}
+        }
+
 exports.removeProduct = async (req, res) => {
-    try {
-        const id = req.params.id
-        const productDetails = await product.removeProduct(id)
+        const productDetails = await product.removeProduct(req.params.id);
+        if (!productDetails) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product Not Found'
+            })
+          }
         res.status(200).json({
             status: true,
-            data: productDetails,
+            message: 'Data was deleted'
         })
-    } catch (err) {
-        res.status(500).json({
-            status: false,
-            error: err
-        })
-    }
 }
 
 exports.searchProduct = (req, res) => {
