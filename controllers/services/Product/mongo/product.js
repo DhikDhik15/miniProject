@@ -8,16 +8,20 @@ const catchError = require('../../../../middleware/catchAsyncError');
 const Client = elasticsearch.Client({
     host: "http://127.0.0.1:9200",
 })
+/*config cloudinary*/ 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
     api_key : process.env.CLOUD_API_KEY,
     api_secret : process.env.CLOUD_API_SECRET
 });
+/*end conf*/ 
 
 exports.createProduct = catchError (async (req, res) => {
-    console.log(req.file);
+    // console.log(req.file);
+    /*save as clud*/ 
     const path = req.file.path
-    const uniqueFilename = new Date().toISOString()
+    const filename = new Date().toISOString()
+    /*end*/ 
     try {
         Client.index({
             index: 'product',
@@ -32,25 +36,78 @@ exports.createProduct = catchError (async (req, res) => {
             barcode: req.body.barcode,
             image: req.file.filename
         }
-        const Product = await product.createProduct({
-            ...payload
-        });
-        if(payload){
-            cloudinary.uploader.upload(path,{
-                public_id: `product/${uniqueFilename}`, tags: `product`
-            },
-            function(err, image){
-                if(err) return res.send(err)
-                console.log('upload to cloud')
-                const fs = require('fs')
-                fs.unlinkSync(path)
-                res.json(image)
+        if(!payload.name || !payload.category || !payload.supplier ||
+            !payload.price || !payload.stock || !payload.barcode || 
+            !payload.image === undefined){
+            res.status(422).json({
+                message: 'cannot null'
+            });
+        } else {
+            product.findSameProduct({
+                ...payload
             })
+            .then(data => {
+                if (data === undefined){
+                    res.status(422).json({
+                        message: 'Product already exist'
+                    });
+                    return;;
+                } 
+                // console.log(data);
+                else {
+                    product.createProduct({
+                        ...payload
+                    })
+                    if(payload){
+                        cloudinary.uploader.upload(path,{
+                            public_id: `product/${filename}`, tags: `product`
+                        },
+                        function(err, image){
+                            if(err) return res.send(err)
+                            console.log('upload to cloud')
+                            const fs = require('fs')
+                            fs.unlinkSync(path)
+                            res.json(image)
+                        });
+                    }
+                }
+            })
+            
         }
-        res.status(200).json({
-            status: true,
-            data: Product,
-        })
+        // } else if (product.findSameProduct) {
+        //     res.status(422).json({
+        //         message: 'product already exist',
+        //     });
+        //     return;;
+        // } else {
+        //     product.createProduct({
+        //         ...payload
+        //     });
+        //     res.status(200).json({
+        //         message: 'product added'
+        //     });
+        // }     
+
+
+        // const Product = await product.createProduct({
+        //     ...payload
+        // });
+        // if(payload){
+        //     cloudinary.uploader.upload(path,{
+        //         public_id: `product/${filename}`, tags: `product`
+        //     },
+        //     function(err, image){
+        //         if(err) return res.send(err)
+        //         console.log('upload to cloud')
+        //         const fs = require('fs')
+        //         fs.unlinkSync(path)
+        //         res.json(image)
+        //     })
+        // }
+        // res.status(200).json({
+        //     status: true,
+        //     data: Product,
+        // })
     } catch (err) {
         console.log(err)
         res.status(500).json({
